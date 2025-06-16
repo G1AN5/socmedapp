@@ -1,0 +1,142 @@
+.container {
+  min-height: 100vh;
+  height: 100vh;
+  max-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  box-sizing: border-box;
+  padding: 40px;
+  overflow: hidden;
+  gap: 40px; /* Add gap between left and right sections */
+}
+
+.left-section {
+  flex: 1.2;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  justify-content: center;
+  padding-right: 40px;
+  gap: 24px; /* Add gap between title and subtitle */
+  height: 100%;
+}
+
+.title {
+  font-size: 5rem;
+  color: #8b1818;
+  font-weight: 600;
+  margin: 0;
+  letter-spacing: 2px;
+  text-shadow: 4px 4px 0 #e0e0e0;
+  position: relative;
+}
+
+.underline {
+  width: 100%;
+  height: 2px;
+  background: #e0b96a;
+  margin-top: 10px;
+}
+
+.subtitle {
+  font-size: 2rem;
+  font-style: italic;
+  color: #111;
+  margin-top: 0;
+  text-align: center;
+  font-weight: 400;
+}
+
+.right-section {
+  flex: 1;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  height: 100%;
+}
+
+.auth-card {
+  background: #8b1818;
+  border-radius: 60px;
+  box-shadow: 12px 12px 32px #e0b96a55, 0 0 32px #0002;
+  padding: 48px 36px 36px 36px;
+  min-width: 350px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+  gap: 18px; /* Add gap between elements inside the card */
+  height: auto;
+}
+
+.input {
+  width: 100%;
+  padding: 14px 18px;
+  border: none;
+  border-radius: 18px;
+  background: #fbe9d8;
+  font-size: 1rem;
+  color: #8b1818;
+  outline: none;
+  box-sizing: border-box;
+}
+
+.input::placeholder {
+  color: #e0b96a;
+  opacity: 1;
+}
+
+.forgot-row {
+  width: 100%;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.forgot {
+  color: #e0b96a;
+  font-size: 0.95rem;
+  font-style: italic;
+  cursor: pointer;
+  text-decoration: underline;
+}
+
+.login-btn {
+  width: 100%;
+  padding: 12px 0;
+  background: #e0b96a;
+  color: #fff;
+  font-size: 1.3rem;
+  font-weight: 600;
+  border: none;
+  border-radius: 18px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.login-btn:hover {
+  background: #cfa13c;
+}
+
+.divider {
+  width: 100%;
+  border: none;
+  border-top: 1.5px solid #e0b96a;
+  margin: 0;
+}
+
+.register-row {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+.register {
+  color: #fff;
+  font-size: 1.2rem;
+  font-style: italic;
+  font-weight: 700;
+  text-shadow: 1px 1px 0 #0002;
+  cursor: pointer;
+  text-decoration: underline;
+}
