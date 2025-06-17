@@ -13,13 +13,8 @@
 
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-<<<<<<< Updated upstream
-import axios from "axios"; // Import axios
-import "./LoginPage.css";
-=======
 import axios from "axios";
 import "../styles/LoginPage.css";
->>>>>>> Stashed changes
 
 export default function LoginPage() {
   const navigate = useNavigate();
