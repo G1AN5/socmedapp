@@ -1,0 +1,127 @@
+.register-container {
+  display: flex;
+  min-height: 100vh;
+  background: #fafafa;
+  padding: 0 2vw;
+  align-items: flex-start;
+  justify-content: center;
+  gap: 32px;
+}
+
+.register-left {
+  flex: 1.2;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding-top: 32px;
+  padding-right: 32px;
+}
+
+.register-title {
+  font-size: 3rem;
+  color: #8b1818;
+  font-weight: 600;
+  margin: 0 0 0.5rem 0;
+  letter-spacing: 2px;
+  text-shadow: 2px 2px 0 #e0e0e0;
+  position: relative;
+}
+
+.register-underline {
+  width: 90%;
+  height: 2px;
+  background: #e0b96a;
+  margin-top: 8px;
+  margin-bottom: 16px;
+}
+
+.register-here {
+  font-size: 2.2rem;
+  font-style: italic;
+  font-weight: 400;
+  margin: 0 0 2rem 0;
+  align-self: center;
+  Color: #8b1818;
+}
+
+.register-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  width: 100%;
+  max-width: 350px;
+  margin: 0 auto;
+}
+
+.register-input {
+  width: 100%;
+  padding: 16px 18px;
+  border: none;
+  border-radius: 20px;
+  background: #fbe9d8;
+  font-size: 1.1rem;
+  color: #8b1818;
+  outline: none;
+  box-sizing: border-box;
+}
+
+.register-input::placeholder {
+  color: #e0b96a;
+  opacity: 1;
+}
+
+.register-proceed {
+  width: 100%;
+  padding: 14px 0;
+  background: #e0b96a;
+  color: #fff;
+  font-size: 1.3rem;
+  font-weight: 600;
+  border: none;
+  border-radius: 20px;
+  margin-top: 1rem;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.register-proceed:hover {
+  background: #cfa13c;
+}
+
+.register-right {
+  flex: 1;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  border-left: 2px solid #f3d9a6;
+  height: 100vh;
+  padding-left: 32px;
+  box-sizing: border-box;
+}
+
+.register-terms {
+  width: 100%;
+  max-width: 420px;
+  margin-top: 48px;
+}
+
+.register-terms h3 {
+  text-align: center;
+  font-size: 2rem;
+  font-weight: 400;
+  margin-bottom: 2rem;
+}
+
+.register-terms-content {
+  max-height: 350px;
+  overflow-y: auto;
+  padding-right: 12px;
+  font-size: 1.4rem;
+  text-align: center;
+}
+
+.register-terms-content p {
+  margin: 2rem 0;
+  line-height: 1.5;
+  color: black; /* Fixed typo: 'Color' -> 'color' */
+}

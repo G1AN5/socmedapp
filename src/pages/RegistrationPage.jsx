@@ -3,7 +3,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
-import "./RegistrationPage.css";
+import "../styles/RegistrationPage.css";
 
 export default function RegistrationPage() {
   const navigate = useNavigate();

@@ -3,7 +3,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios"; // Import axios
-import "./LoginPage.css";
+import "../styles/LoginPage.css";
 
 export default function LoginPage() {
   const navigate = useNavigate();

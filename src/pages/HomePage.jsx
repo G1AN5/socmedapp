@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import './HomePage.css';
+import '../styles/HomePage.css';
 
 export default function HomePage() {
   const navigate = useNavigate();
