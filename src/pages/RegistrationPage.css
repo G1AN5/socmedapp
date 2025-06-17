@@ -122,5 +122,5 @@
 .register-terms-content p {
   margin: 2rem 0;
   line-height: 1.5;
-  Color: black
+  color: black; /* Fixed typo: 'Color' -> 'color' */
 }

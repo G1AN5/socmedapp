@@ -1,3 +1,7 @@
+// LoginPage.jsx
+// This page displays the login form for the application.
+// It includes navigation to the registration page and a placeholder for "Forgot password?"
+
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import "./LoginPage.css";
@@ -5,8 +9,20 @@ import "./LoginPage.css";
 export default function LoginPage() {
   const navigate = useNavigate();
 
+  // Handler for "Forgot password?" link (currently just an alert)
+  const handleForgotPassword = (e) => {
+    e.preventDefault();
+    alert("Forgot password clicked!");
+  };
+
+  // Handler for "Register now!" link (navigates to registration page)
+  const handleRegister = () => {
+    navigate("/register");
+  };
+
   return (
     <div className="container">
+      {/* Left section: Branding and tagline */}
       <div className="left-section">
         <h1 className="title">
           QUICKEY
@@ -18,6 +34,7 @@ export default function LoginPage() {
           <span>SINGLE TOUCH</span>
         </p>
       </div>
+      {/* Right section: Login form */}
       <div className="right-section">
         <div className="auth-card">
           <input
@@ -35,10 +52,7 @@ export default function LoginPage() {
               className="forgot"
               href="#"
               tabIndex={0}
-              onClick={(e) => {
-                e.preventDefault();
-                alert("Forgot password clicked!");
-              }}
+              onClick={handleForgotPassword}
             >
               Forgot password?
             </a>
@@ -49,7 +63,7 @@ export default function LoginPage() {
             <span
               className="register"
               tabIndex={0}
-              onClick={() => navigate("/register")}
+              onClick={handleRegister}
               style={{ cursor: "pointer" }}
             >
               Register now!

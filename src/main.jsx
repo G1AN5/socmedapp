@@ -1,3 +1,6 @@
+// main.jsx
+// Entry point for the React app. Sets up routing for Login and Registration pages.
+
 import React from "react";
 import { createRoot } from "react-dom/client";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
