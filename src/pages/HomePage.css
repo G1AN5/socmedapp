@@ -1,0 +1,30 @@
+/* src/pages/HomePage.css */
+
+.home-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  color: #333;
+  background-color: #f4f4f4;
+}
+
+.home-container h1 {
+  color: #8b1818;
+}
+
+.logout-btn {
+  margin-top: 20px;
+  padding: 10px 20px;
+  background-color: #8b1818;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 1rem;
+}
+
+.logout-btn:hover {
+  background-color: #6c1313;
+}
