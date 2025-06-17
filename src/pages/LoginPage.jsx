@@ -13,11 +13,7 @@
 
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-<<<<<<< HEAD
-import axios from "axios"; // Import axios
-=======
 import axios from "axios";
->>>>>>> test-ui
 import "../styles/LoginPage.css";
 
 export default function LoginPage() {

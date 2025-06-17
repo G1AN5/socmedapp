@@ -1,5 +1,3 @@
-<<<<<<< HEAD
-=======
 /**
  * RegistrationPage.css
  * --------------------
@@ -8,7 +6,6 @@
  */
 
 /* Main container for registration page layout */
->>>>>>> test-ui
 .register-container {
   display: flex;
   min-height: 100vh;
@@ -16,16 +13,10 @@
   padding: 0 2vw;
   align-items: flex-start;
   justify-content: center;
-<<<<<<< HEAD
-  gap: 32px;
-}
-
-=======
   gap: 32px; /* Gap between left and right sections */
 }
 
 /* Left section: registration form and branding */
->>>>>>> test-ui
 .register-left {
   flex: 1.2;
   display: flex;
@@ -35,10 +26,7 @@
   padding-right: 32px;
 }
 
-<<<<<<< HEAD
-=======
 /* Registration page title styling */
->>>>>>> test-ui
 .register-title {
   font-size: 3rem;
   color: #8b1818;
@@ -49,10 +37,7 @@
   position: relative;
 }
 
-<<<<<<< HEAD
-=======
 /* Underline below the registration title */
->>>>>>> test-ui
 .register-underline {
   width: 90%;
   height: 2px;
@@ -61,26 +46,17 @@
   margin-bottom: 16px;
 }
 
-<<<<<<< HEAD
-=======
 /* "Register Here" subtitle styling */
->>>>>>> test-ui
 .register-here {
   font-size: 2.2rem;
   font-style: italic;
   font-weight: 400;
   margin: 0 0 2rem 0;
   align-self: center;
-<<<<<<< HEAD
-  Color: #8b1818;
-}
-
-=======
   color: #8b1818;
 }
 
 /* Registration form layout */
->>>>>>> test-ui
 .register-form {
   display: flex;
   flex-direction: column;
@@ -90,10 +66,7 @@
   margin: 0 auto;
 }
 
-<<<<<<< HEAD
-=======
 /* Input fields styling */
->>>>>>> test-ui
 .register-input {
   width: 100%;
   padding: 16px 18px;
@@ -106,19 +79,13 @@
   box-sizing: border-box;
 }
 
-<<<<<<< HEAD
-=======
 /* Placeholder color for input fields */
->>>>>>> test-ui
 .register-input::placeholder {
   color: #e0b96a;
   opacity: 1;
 }
 
-<<<<<<< HEAD
-=======
 /* Registration submit button styling */
->>>>>>> test-ui
 .register-proceed {
   width: 100%;
   padding: 14px 0;
@@ -133,18 +100,12 @@
   transition: background 0.2s;
 }
 
-<<<<<<< HEAD
-=======
 /* Registration button hover effect */
->>>>>>> test-ui
 .register-proceed:hover {
   background: #cfa13c;
 }
 
-<<<<<<< HEAD
-=======
 /* Right section: terms and conditions */
->>>>>>> test-ui
 .register-right {
   flex: 1;
   display: flex;
@@ -156,20 +117,14 @@
   box-sizing: border-box;
 }
 
-<<<<<<< HEAD
-=======
 /* Terms and conditions container */
->>>>>>> test-ui
 .register-terms {
   width: 100%;
   max-width: 420px;
   margin-top: 48px;
 }
 
-<<<<<<< HEAD
-=======
 /* Terms and conditions title */
->>>>>>> test-ui
 .register-terms h3 {
   text-align: center;
   font-size: 2rem;
@@ -177,10 +132,7 @@
   margin-bottom: 2rem;
 }
 
-<<<<<<< HEAD
-=======
 /* Terms and conditions content area */
->>>>>>> test-ui
 .register-terms-content {
   max-height: 350px;
   overflow-y: auto;
@@ -189,17 +141,9 @@
   text-align: center;
 }
 
-<<<<<<< HEAD
-.register-terms-content p {
-  margin: 2rem 0;
-  line-height: 1.5;
-  color: black; /* Fixed typo: 'Color' -> 'color' */
-}
-=======
 /* Paragraphs inside terms and conditions */
 .register-terms-content p {
   margin: 2rem 0;
   line-height: 1.5;
   color: black;
 }
->>>>>>> test-ui
