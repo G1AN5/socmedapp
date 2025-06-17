@@ -1,5 +1,15 @@
 // src/pages/RegistrationPage.jsx
 
+/**
+ * RegistrationPage Component
+ * -------------------------
+ * This component renders the registration form for new users.
+ * It collects user details (first name, last name, email, password, confirm password),
+ * validates the input, and sends a registration request to the backend API.
+ * On successful registration, the user is redirected to the home page.
+ * Errors are displayed above the form.
+ */
+
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
@@ -7,25 +17,31 @@ import "../styles/RegistrationPage.css";
 
 export default function RegistrationPage() {
   const navigate = useNavigate();
-  
-  // --- State Management for Inputs ---
-  const [fName, setFName] = useState("");
-  const [lName, setLName] = useState(""); // Added state for Last Name
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
-  const [error, setError] = useState("");
 
+  // --- State Management for Inputs ---
+  const [fName, setFName] = useState(""); // First Name
+  const [lName, setLName] = useState(""); // Last Name
+  const [email, setEmail] = useState(""); // Email
+  const [password, setPassword] = useState(""); // Password
+  const [confirmPassword, setConfirmPassword] = useState(""); // Confirm Password
+  const [error, setError] = useState(""); // Error message
+
+  // --- API Base URL ---
   const API_URL = "https://supabase-socmed.vercel.app";
 
+  /**
+   * Handles form submission for registration.
+   * Validates input fields, sends a POST request to the backend,
+   * and handles the response.
+   */
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");
 
-    // --- Updated Validation ---
-    if (!fName || !lName || !email || !password || !confirmPassword) { // Check for lName
-        setError("All fields are required.");
-        return;
+    // --- Input Validation ---
+    if (!fName || !lName || !email || !password || !confirmPassword) {
+      setError("All fields are required.");
+      return;
     }
     if (password !== confirmPassword) {
       setError("Passwords do not match.");
@@ -33,25 +49,28 @@ export default function RegistrationPage() {
     }
 
     try {
-      // --- Updated API Parameters ---
+      // --- Prepare form data for API ---
       const params = new URLSearchParams();
       params.append('fName', fName);
-      params.append('lName', lName); // Add lName to the request
+      params.append('lName', lName);
       params.append('email', email);
       params.append('password', password);
 
+      // --- Send registration request to backend ---
       const response = await axios.post(`${API_URL}/register`, params, {
         headers: {
           'Content-Type': 'application/x-www-form-urlencoded',
         },
       });
-      
+
+      // --- Handle successful registration ---
       if (response.data.access_token) {
         localStorage.setItem("authToken", response.data.access_token);
         navigate("/home");
       }
 
     } catch (err) {
+      // --- Handle registration errors ---
       const errorMessage = err.response?.data?.message || "Registration failed. Please try again.";
       setError(errorMessage);
       console.error("Registration Error:", err);
@@ -60,6 +79,7 @@ export default function RegistrationPage() {
 
   return (
     <div className="register-container">
+      {/* Left section: Registration form */}
       <div className="register-left">
         <h1 className="register-title">
           QUICKEY
@@ -67,23 +87,26 @@ export default function RegistrationPage() {
         </h1>
         <h2 className="register-here">Register Here</h2>
         <form className="register-form" onSubmit={handleSubmit}>
+          {/* Display error message if any */}
           {error && <p style={{ color: 'red' }}>{error}</p>}
-          
-          {/* --- Updated Form Fields --- */}
+
+          {/* First Name input */}
           <input 
             className="register-input" 
             type="text" 
-            placeholder="First Name" // Changed placeholder
+            placeholder="First Name"
             value={fName}
             onChange={(e) => setFName(e.target.value)}
           />
+          {/* Last Name input */}
           <input 
             className="register-input" 
             type="text" 
-            placeholder="Last Name" // Added Last Name input
+            placeholder="Last Name"
             value={lName}
             onChange={(e) => setLName(e.target.value)}
           />
+          {/* Email input */}
           <input 
             className="register-input" 
             type="email" 
@@ -91,6 +114,7 @@ export default function RegistrationPage() {
             value={email}
             onChange={(e) => setEmail(e.target.value)}
           />
+          {/* Password input */}
           <input 
             className="register-input" 
             type="password" 
@@ -98,6 +122,7 @@ export default function RegistrationPage() {
             value={password}
             onChange={(e) => setPassword(e.target.value)}
           />
+          {/* Confirm Password input */}
           <input 
             className="register-input" 
             type="password" 
@@ -105,9 +130,11 @@ export default function RegistrationPage() {
             value={confirmPassword}
             onChange={(e) => setConfirmPassword(e.target.value)}
           />
+          {/* Submit button */}
           <button className="register-proceed" type="submit">Proceed</button>
         </form>
       </div>
+      {/* Right section: Terms and Conditions */}
       <div className="register-right">
         <div className="register-terms">
           <h3>Terms and Conditions:</h3>

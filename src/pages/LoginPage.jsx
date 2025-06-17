@@ -1,22 +1,41 @@
 // src/pages/LoginPage.jsx
 
+/**
+ * LoginPage Component
+ * -------------------
+ * Renders the login form for existing users.
+ * Collects user credentials (email and password), validates input,
+ * and sends a login request to the backend API.
+ * On successful login, redirects to the home page and stores the access token.
+ * Errors are displayed above the form.
+ * Includes navigation to the registration page and a placeholder for "Forgot password?".
+ */
+
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+<<<<<<< HEAD
 import axios from "axios"; // Import axios
+=======
+import axios from "axios";
+>>>>>>> test-ui
 import "../styles/LoginPage.css";
 
 export default function LoginPage() {
   const navigate = useNavigate();
 
   // --- State Management for Inputs ---
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [error, setError] = useState(""); // To display login errors
+  const [email, setEmail] = useState(""); // Email input
+  const [password, setPassword] = useState(""); // Password input
+  const [error, setError] = useState(""); // Error message
 
   // --- API Base URL ---
   const API_URL = "https://supabase-socmed.vercel.app";
 
-  // --- Login Handler ---
+  /**
+   * Handles form submission for login.
+   * Validates input fields, sends a POST request to the backend,
+   * and handles the response.
+   */
   const handleLogin = async (e) => {
     e.preventDefault();
     setError(""); // Clear previous errors
@@ -44,6 +63,8 @@ export default function LoginPage() {
       if (response.data.access_token) {
         localStorage.setItem("authToken", response.data.access_token); // Store token
         navigate("/home"); // Navigate to a protected home page
+      } else {
+        setError("Login failed. Please check your credentials.");
       }
     } catch (err) {
       // Handle login errors
@@ -53,10 +74,17 @@ export default function LoginPage() {
     }
   };
 
+  /**
+   * Navigates to the registration page.
+   */
   const handleRegister = () => {
     navigate("/register");
   };
 
+  /**
+   * Handles "Forgot password?" click.
+   * Currently shows an alert as a placeholder.
+   */
   const handleForgotPassword = (e) => {
     e.preventDefault();
     alert("Forgot password clicked!");
@@ -64,6 +92,7 @@ export default function LoginPage() {
 
   return (
     <div className="container">
+      {/* Left section: Branding and tagline */}
       <div className="left-section">
         <h1 className="title">
           QUICKEY
@@ -75,23 +104,28 @@ export default function LoginPage() {
           <span>SINGLE TOUCH</span>
         </p>
       </div>
+      {/* Right section: Login form */}
       <div className="right-section">
         <form className="auth-card" onSubmit={handleLogin}>
-          {error && <p style={{ color: 'yellow' }}>{error}</p>} {/* Display error message */}
+          {/* Display error message if any */}
+          {error && <p style={{ color: 'yellow' }}>{error}</p>}
+          {/* Email input */}
           <input
             className="input"
-            type="email" // Changed type to email for better validation
+            type="email"
             placeholder="Email"
             value={email}
-            onChange={(e) => setEmail(e.target.value)} // Controlled component
+            onChange={(e) => setEmail(e.target.value)}
           />
+          {/* Password input */}
           <input
             className="input"
             type="password"
             placeholder="Password"
             value={password}
-            onChange={(e) => setPassword(e.target.value)} // Controlled component
+            onChange={(e) => setPassword(e.target.value)}
           />
+          {/* Forgot password link */}
           <div className="forgot-row">
             <a
               className="forgot"
@@ -102,8 +136,10 @@ export default function LoginPage() {
               Forgot password?
             </a>
           </div>
-          <button className="login-btn" type="submit">Log In</button> {/* Changed to type="submit" */}
+          {/* Login button */}
+          <button className="login-btn" type="submit">Log In</button>
           <hr className="divider" />
+          {/* Register link */}
           <div className="register-row">
             <span
               className="register"
