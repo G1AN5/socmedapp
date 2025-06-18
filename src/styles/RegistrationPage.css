@@ -135,8 +135,37 @@
 
 /* Terms and conditions content area */
 .register-terms-content {
-  font-size: 1.1rem; 
-  text-align: center;
+  font-size: 1.1rem;
+  text-align: left;
+  max-height: 350px;
+  overflow-y: auto;
+  padding-right: 8px;
+  /* Custom scrollbar styling */
+  scrollbar-width: thin;
+  scrollbar-color: #e0b96a #fbe9d8;
+}
+
+/* Webkit (Chrome, Edge, Safari) scrollbar styles */
+.register-terms-content::-webkit-scrollbar {
+  width: 8px;
+  background: #fbe9d8;
+}
+
+.register-terms-content::-webkit-scrollbar-thumb {
+  background: #e0b96a;
+  border-radius: 16px; /* Rounded rectangle */
+  min-height: 40px;
+  border: 2px solid #fbe9d8; /* Padding effect for thumb */
+}
+
+.register-terms-content::-webkit-scrollbar-thumb:hover {
+  background: #cfa13c;
+}
+
+.register-terms-content::-webkit-scrollbar-button {
+  display: none;
+  height: 0;
+  width: 0;
 }
 
 /* Paragraphs inside terms and conditions */
@@ -144,4 +173,10 @@
   margin: 1.5rem 0; 
   line-height: 1.5;
   color: black;
+}
+
+/* Make the terms and conditions label text black */
+#accept-terms + label,
+label[for="accept-terms"] {
+  color: #111;
 }
