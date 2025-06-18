@@ -1,0 +1,81 @@
+/* src/components/PostCard.css */
+.post-card-container {
+  height: 100%; 
+  width: 100%;
+  scroll-snap-align: start; 
+  background-color: #f2e5d2;
+  border-radius: 15px;
+  padding: 20px;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+}
+
+.post-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.post-profile-pic {
+  width: 45px;
+  height: 45px;
+  border-radius: 50%;
+  border: 2px solid #8c0e0f;
+  object-fit: cover;
+}
+
+.post-author-info {
+  flex-grow: 1;
+}
+
+.post-author-name {
+  background-color: #dfc389;
+  padding: 4px 12px;
+  border-radius: 10px;
+  font-weight: bold;
+  color: #000;
+  display: inline-block;
+  margin-bottom: 4px;
+}
+
+.post-date {
+  background-color: #0b2839;
+  color: white;
+  padding: 2px 10px;
+  border-radius: 10px;
+  font-size: 0.8rem;
+  display: inline-block;
+}
+
+.post-actions {
+  display: flex;
+  gap: 15px;
+  color: #0b2839;
+}
+
+.post-content-box {
+  flex-grow: 1;
+  background-color: #f2e5d2;
+  border: 1px solid #dfc389;
+  border-radius: 10px;
+  padding: 15px;
+  overflow-y: auto;
+  font-size: 1rem;
+  line-height: 1.5;
+  color: #000;
+}
+
+.post-stats {
+    padding-top: 10px;
+    font-size: 0.9rem;
+    color: #0b2839;
+    display: flex;
+    gap: 20px;
+}
+
+.post-actions .liked {
+  fill: #e74c3c;
+  color: #e74c3c;
+}

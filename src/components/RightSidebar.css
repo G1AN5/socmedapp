@@ -1,0 +1,78 @@
+/* src/components/RightSidebar.css */
+.right-sidebar {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+.profile-button-container {
+  background-color: #8c0e0f;
+  color: white;
+  padding: 10px;
+  border-radius: 50px;
+  border: 2px solid #8c0e0f;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  font-size: 1.2rem;
+  cursor: pointer;
+}
+.my-profile-pic {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: 2px solid white;
+}
+.new-post-form {
+  background-color: #f6f6f6;
+  border-radius: 15px;
+  padding: 15px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.new-post-header {
+  background-color: #fff9ef;
+  border: 1px solid #333;
+  padding: 10px;
+  border-radius: 10px;
+  text-align: center;
+  font-weight: 600;
+  color: #333;
+}
+.new-post-form textarea {
+  min-height: 150px;
+  border: 1px solid #dfc389;
+  border-radius: 10px;
+  padding: 10px;
+  resize: vertical;
+  font-size: 1rem;
+  background-color: #fff;
+  color: #333;
+  font-family: inherit;
+}
+.new-post-form button {
+  background-color: #dfc389;
+  border: none;
+  padding: 12px;
+  border-radius: 10px;
+  font-weight: bold;
+  font-size: 1.1rem;
+  cursor: pointer;
+  transition: background-color 0.2s;
+  color: #000;
+}
+.new-post-form button:hover {
+  background-color: #cfa13c;
+}
+.footer-links {
+  margin-top: auto;
+  text-align: center;
+  padding-bottom: 10px;
+}
+.footer-links a {
+  margin: 0 10px;
+  color: #666;
+  text-decoration: none;
+  font-size: 0.9rem;
+}

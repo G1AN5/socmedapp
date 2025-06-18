@@ -77,14 +77,19 @@ export default function RegistrationPage() {
     }
   };
 
-  return (
+return (
     <div className="register-container">
-      {/* Left section: Registration form */}
       <div className="register-left">
-        <h1 className="register-title">
-          QUICKEY
-          <div className="register-underline"></div>
-        </h1>
+        {/* Make the logo container clickable */}
+        <div 
+          onClick={() => navigate("/")} 
+          style={{ cursor: 'pointer', alignSelf: 'flex-start' }}
+        >
+          <h1 className="register-title">
+            QUICKEY
+            <div className="register-underline"></div>
+          </h1>
+        </div>
         <h2 className="register-here">Register Here</h2>
         <form className="register-form" onSubmit={handleSubmit}>
           {/* Display error message if any */}

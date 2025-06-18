@@ -8,26 +8,26 @@
 /* Container for the login page layout */
 .container {
   min-height: 100vh;
-  height: 100vh;
-  max-height: 100vh;
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: center; 
   box-sizing: border-box;
   padding: 40px;
-  overflow: hidden;
-  gap: 40px; /* Gap between left and right sections */
+  width: 100%;
+  max-width: 1400px;
+  margin: 0 auto; 
+  gap: 40px;
 }
 
 /* Left branding section: logo and tagline */
 .left-section {
-  flex: 1.2;
+  flex: 1; 
   display: flex;
   flex-direction: column;
   align-items: flex-end;
   justify-content: center;
   padding-right: 40px;
-  gap: 24px; /* Gap between title and subtitle */
+  gap: 24px;
   height: 100%;
 }
 
@@ -80,7 +80,7 @@
   flex-direction: column;
   align-items: center;
   position: relative;
-  gap: 18px; /* Gap between elements inside the card */
+  gap: 18px; 
   height: auto;
 }
 
