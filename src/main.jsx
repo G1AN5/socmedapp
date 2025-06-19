@@ -8,6 +8,7 @@ import LoginPage from "./pages/LoginPage";
 import RegistrationPage from "./pages/RegistrationPage";
 import HomePage from "./pages/HomePage"; 
 import LikePosts from "./pages/LikePosts";
+import ProfilePage from './pages/ProfilePage';
 import "./index.css";
 
 createRoot(document.getElementById("root")).render(
@@ -17,6 +18,7 @@ createRoot(document.getElementById("root")).render(
         <Routes>
           <Route path="/" element={<LoginPage />} />
           <Route path="/register" element={<RegistrationPage />} />
+          <Route path="/register" element={<ProfilePage />} />
           <Route path="/home" element={<HomePage />} /> 
           <Route path="/liked-posts" element={<LikedPosts />} />
         </Routes>
