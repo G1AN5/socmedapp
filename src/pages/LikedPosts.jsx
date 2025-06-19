@@ -52,30 +52,34 @@ export default function LikedPosts() {
   
   // --- DATA FETCHING LOGIC ---
   useEffect(() => {
-    const fetchPosts = async () => {
-      if (!authToken) return;
-      setLoading(true);
-      try {
-        const response = await axios.get(
-          `${API_URL}/my-posts?page=${page}`,
-          { headers: { 'Authorization': `Bearer ${authToken}` } }
+  const fetchLikedPosts = async () => {
+    if (!authToken || !currentUser) return;
+    setLoading(true);
+    try {
+      const response = await axios.get(
+        `${API_URL}/liked-posts?user_id=${currentUser.id}&page=${page}`,
+        { headers: authHeaders }
+      );
+      const newPosts = response.data;
+
+      setPosts(prevPosts => {
+        const combined = [...prevPosts, ...newPosts];
+        return combined.filter((post, index, self) =>
+          index === self.findIndex(p => p.id === post.id)
         );
-        const newPosts = response.data;
-
-        setPosts(prevPosts => [...prevPosts, ...newPosts]);
-        setHasMore(newPosts.length > 0);
-
-        if (page === 1 && newPosts.length > 0) {
-          setActivePost(newPosts[0]);
-        }
-      } catch (error) {
-        console.error("Failed to fetch posts:", error);
-      }
+      });
+      
+      setHasMore(newPosts.length > 0);
+      if (page === 1 && newPosts.length > 0) setActivePost(newPosts[0]);
+    } catch (error) {
+      console.error("Failed to fetch liked posts:", error);
+    } finally {
       setLoading(false);
-    };
+    }
+  };
 
-    fetchPosts();
-  }, [page, authToken]); 
+  fetchLikedPosts();
+}, [page, authToken, currentUser]);
 
   // --- Scrolling Observers ---
 
