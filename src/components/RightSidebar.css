@@ -50,6 +50,7 @@
   background-color: #fff;
   color: #333;
   font-family: inherit;
+  resize: none;
 }
 .new-post-form button {
   background-color: #dfc389;

@@ -9,25 +9,28 @@ import './LeftSidebar.css';
 export default function LeftSidebar({ activePost, currentUser, authHeaders, API_URL, onLogout }) {
     const [replies, setReplies] = useState([]);
     
-    const fetchReplies = async () => {
-        if (!activePost) return;
-        try {
-            const response = await axios.get(`${API_URL}/post/${activePost.id}`, { headers: authHeaders });
-            setReplies(response.data.replies || []);
-        } catch (error) {
-            console.error("Failed to fetch replies:", error);
-        }
-    };
-
     useEffect(() => {
-        fetchReplies();
-    }, [activePost]);
+      const fetchReplies = async () => {
+          if (!activePost) {
+              setReplies([]); // Clear replies if no post is active
+              return;
+          }
+          try {
+              const response = await axios.get(`${API_URL}/post/${activePost.id}`, { headers: authHeaders });
+              setReplies(response.data.replies || []);
+          } catch (error) {
+              console.error("Failed to fetch replies:", error);
+              setReplies([]); // Clear replies on error
+          }
+      };
+      fetchReplies();
+    }, [activePost, API_URL, authHeaders]);
 
     const handleDeleteReply = async (replyId) => {
         if (!activePost) return;
         try {
-            await axios.delete(`${API_URL}/post/${activePost.id}/replies/${replyId}`, { headers: authHeaders });
-            fetchReplies();
+            const response = await axios.delete(`${API_URL}/post/${activePost.id}/replies/${replyId}`, { headers: authHeaders });
+            setReplies(response.data.replies || []);
         } catch (error) {
             console.error("Failed to delete reply:", error);
             alert("Could not delete reply.");
@@ -59,12 +62,22 @@ export default function LeftSidebar({ activePost, currentUser, authHeaders, API_
                     {replies.length > 0 ? replies.map(reply => (
                         <div key={reply.id} className="reply-card">
                             <div className="reply-header">
-                                <img src={reply.users.profile_picture} alt="profile" className="reply-profile-pic" />
+                                {reply.users && reply.users.profile_picture ? (
+                                    <img 
+                                        src={reply.users.profile_picture} 
+                                        alt="profile" 
+                                        className="reply-profile-pic" 
+                                    />
+                                ) : (
+                                    <div className="reply-avatar-fallback">
+                                        {reply.users ? reply.users.fName[0].toUpperCase() : '?'}
+                                    </div>
+                                )}
                                 <div className="reply-author-info">
-                                    <div className="reply-author-name">{reply.users.fName} {reply.users.lName}</div>
+                                    <div className="reply-author-name">{reply.users?.fName} {reply.users?.lName}</div>
                                     <div className="reply-date">{format(new Date(reply.created_at), 'MMM d, yyyy')}</div>
                                 </div>
-                                {reply.users.id === currentUser.id && (
+                                {reply.users?.id === currentUser.id && (
                                     <Trash2 
                                         className="delete-reply-icon" 
                                         size={18} 
@@ -74,7 +87,7 @@ export default function LeftSidebar({ activePost, currentUser, authHeaders, API_
                             </div>
                             <p className="reply-content">{reply.content}</p>
                         </div>
-                    )) : <p>No replies yet.</p>}
+                    )) : <p className="no-replies-text">No replies yet.</p>}
                 </div>
             </div>
         </aside>

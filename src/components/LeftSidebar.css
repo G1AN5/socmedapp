@@ -3,6 +3,8 @@
   display: flex;
   flex-direction: column;
   gap: 20px;
+  height: 100%; 
+  overflow: hidden; 
 }
 .logo-container {
   padding: 10px 0; 
@@ -99,6 +101,12 @@
   gap: 8px;
   margin-bottom: 8px;
 }
+.no-replies-text {
+    color: #888; 
+    text-align: center;
+    margin-top: 20px;
+    font-style: italic;
+}
 .reply-profile-pic {
   width: 35px;
   height: 35px;
@@ -129,4 +137,17 @@
 }
 .delete-reply-icon:hover {
   color: #8c0e0f;
+}
+.reply-avatar-fallback {
+  width: 35px;
+  height: 35px;
+  border-radius: 50%;
+  background-color: #dfc389;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.2rem;
+  font-weight: bold;
+  line-height: 1;
 }

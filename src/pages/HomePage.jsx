@@ -5,7 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { format } from 'date-fns';
 
-import '../styles/HomePage.css'; 
+import '../styles/HomePage.css';
 import PostCard from '../components/PostCard';
 import LeftSidebar from '../components/LeftSidebar';
 import RightSidebar from '../components/RightSidebar';
@@ -18,18 +18,21 @@ export default function HomePage() {
   const [loading, setLoading] = useState(false);
   const [hasMore, setHasMore] = useState(true);
   const [activePost, setActivePost] = useState(null);
+  const [replyingTo, setReplyingTo] = useState(null);
 
   const API_URL = "https://supabase-socmed.vercel.app";
   const observer = useRef();
+  const postObserver = useRef();
+  const feedContainerRef = useRef(null); 
 
-  // Auth token and headers setup
   const authToken = localStorage.getItem("authToken");
   const authHeaders = {
     'Authorization': `Bearer ${authToken}`,
     'Content-Type': 'application/x-www-form-urlencoded',
   };
 
-  // Fetch current user's data
+  // --- Data Fetching ---
+
   useEffect(() => {
     if (!authToken) {
       navigate("/");
@@ -46,31 +49,35 @@ export default function HomePage() {
     };
     fetchCurrentUser();
   }, [authToken, navigate]);
-
-  // Fetch posts
-  const fetchPosts = useCallback(async () => {
-    setLoading(true);
-    try {
-      const response = await axios.get(`${API_URL}/post?page=${page}`, { headers: { 'Authorization': `Bearer ${authToken}` } });
-      const newPosts = response.data;
-      setPosts(prevPosts => [...prevPosts, ...newPosts]);
-      setHasMore(newPosts.length > 0);
-      if (page === 1 && newPosts.length > 0) {
-        setActivePost(newPosts[0]);
-      }
-    } catch (error) {
-      console.error("Failed to fetch posts:", error);
-    }
-    setLoading(false);
-  }, [page, authToken]);
   
+  // --- DATA FETCHING LOGIC ---
   useEffect(() => {
-    if (authToken) {
-        fetchPosts();
-    }
-  }, [fetchPosts, authToken]);
+    const fetchPosts = async () => {
+      if (!authToken) return;
+      setLoading(true);
+      try {
+        const response = await axios.get(`${API_URL}/post?page=${page}`, { headers: { 'Authorization': `Bearer ${authToken}` } });
+        const newPosts = response.data;
+        
+        // When appending new posts, use the functional update form of setState
+        setPosts(prevPosts => [...prevPosts, ...newPosts]);
+        setHasMore(newPosts.length > 0);
+        
+        // This logic for setting the initial active post is now part of the same effect
+        if (page === 1 && newPosts.length > 0) {
+          setActivePost(newPosts[0]);
+        }
+      } catch (error) {
+        console.error("Failed to fetch posts:", error);
+      }
+      setLoading(false);
+    };
 
-  // Infinite scroll observer
+    fetchPosts();
+  }, [page, authToken]); 
+
+  // --- Scrolling Observers ---
+
   const lastPostElementRef = useCallback(node => {
     if (loading) return;
     if (observer.current) observer.current.disconnect();
@@ -82,49 +89,71 @@ export default function HomePage() {
     if (node) observer.current.observe(node);
   }, [loading, hasMore]);
   
-  // Snap scroll observer for setting active post
-  const postObserver = useRef();
   useEffect(() => {
-      postObserver.current = new IntersectionObserver(
-          (entries) => {
-              entries.forEach((entry) => {
-                  if (entry.isIntersecting) {
-                      const postId = Number(entry.target.dataset.postId);
-                      const post = posts.find(p => p.id === postId);
-                      if (post) {
-                          setActivePost(post);
-                      }
-                  }
-              });
-          },
-          { threshold: 0.7 }
-      );
-      const postElements = document.querySelectorAll('.post-card-container');
-      postElements.forEach(el => postObserver.current.observe(el));
-      return () => {
-          if (postObserver.current) {
-              postObserver.current.disconnect();
-          }
-      };
-  }, [posts]);
+    postObserver.current = new IntersectionObserver(
+        (entries) => {
+            entries.forEach((entry) => {
+                if (entry.isIntersecting && entry.target.dataset.postId) {
+                    const postId = Number(entry.target.dataset.postId);
+                    const post = posts.find(p => p.id === postId);
+                    if (post && post.id !== activePost?.id) {
+                        setActivePost(post);
+                    }
+                }
+            });
+        },
+        { threshold: 0.7 }
+    );
+    const postElements = document.querySelectorAll('.post-card-container');
+    postElements.forEach(el => postObserver.current.observe(el));
+    return () => { postObserver.current?.disconnect(); };
+  }, [posts, activePost?.id]);
 
-  // Function to handle new post creation
-  const handlePostCreated = (newPost) => {
-    setPosts(prevPosts => [newPost, ...prevPosts]);
-  }
+  // --- Event Handlers ---
 
-  const handleLogout = () => {
-    localStorage.removeItem("authToken"); // Clear the token from storage
-    navigate("/"); // Redirect to the login page
+  const handlePostCreated = (newPostData) => {
+    const newPostObject = newPostData[0];
+    if (!newPostObject) {
+      console.error("API response for new post is invalid:", newPostData);
+      return;
+    }
+    const postWithUserData = {
+        ...newPostObject,
+        users: currentUser,
+        likes: [{ count: 0 }],
+        replies: [{ count: 0 }]
+    };
+    setPosts(prevPosts => [postWithUserData, ...prevPosts]);
+    feedContainerRef.current?.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
+  const handleToggleReplyMode = (post) => {
+    if (replyingTo && replyingTo.id === post.id) {
+        setReplyingTo(null);
+    } else {
+        setReplyingTo(post);
+    }
+  };
+  
+  const handleReplyCreated = (updatedPost) => {
+      setPosts(prevPosts => prevPosts.map(p => p.id === updatedPost.id ? updatedPost : p));
+      setActivePost(updatedPost);
+      setReplyingTo(null);
+  };
+
+  const handleLogout = () => {
+    localStorage.removeItem("authToken");
+    navigate("/");
+  };
+
+  // --- Render Logic ---
+
   if (!currentUser) {
-    return <div>Loading Profile...</div>;
+    return <div style={{ textAlign: 'center', marginTop: '40px' }}>Loading Profile...</div>;
   }
 
- return (
+  return (
     <div className="home-page-container">
-      {/* Pass the handleLogout function as a prop */}
       <LeftSidebar 
         activePost={activePost} 
         currentUser={currentUser} 
@@ -132,28 +161,36 @@ export default function HomePage() {
         API_URL={API_URL}
         onLogout={handleLogout} 
       />
+      
       <main className="main-feed">
-        <div className="posts-feed-container">
+        <div className="posts-feed-container" ref={feedContainerRef}>
           {posts.map((post, index) => {
              const postCardProps = {
-                key: post.id,
                 post: post,
-                format,
+                format: format,
                 authHeaders: authHeaders,
                 API_URL: API_URL,
-                "data-post-id": post.id,
+                onToggleReply: handleToggleReplyMode,
+                currentUser: currentUser,
              };
              if (posts.length === index + 1) {
-                return <PostCard ref={lastPostElementRef} {...postCardProps} />
+                return <PostCard key={post.id} ref={lastPostElementRef} {...postCardProps} />;
              }
-             return <PostCard {...postCardProps} />
+             return <PostCard key={post.id} {...postCardProps} />;
           })}
           {loading && <p style={{textAlign: "center", color: "#333"}}>Loading more posts...</p>}
-          {!hasMore && <p style={{textAlign: "center", color: "#333"}}>No more posts to show.</p>}
+          {!hasMore && posts.length > 0 && <p style={{textAlign: "center", color: "#333"}}>No more posts to show.</p>}
         </div>
       </main>
 
-      <RightSidebar currentUser={currentUser} onPostCreated={handlePostCreated} authHeaders={authHeaders} API_URL={API_URL} />
+      <RightSidebar 
+        currentUser={currentUser} 
+        onPostCreated={handlePostCreated}
+        replyingTo={replyingTo}
+        onReplyCreated={handleReplyCreated}
+        authHeaders={authHeaders} 
+        API_URL={API_URL} 
+      />
     </div>
   );
 }
