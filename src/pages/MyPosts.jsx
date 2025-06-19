@@ -1,5 +1,3 @@
-// src/pages/HomePage.jsx
-
 import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
@@ -10,7 +8,7 @@ import PostCard from '../components/PostCard';
 import LeftSidebar from '../components/LeftSidebar';
 import RightSidebar from '../components/RightSidebar';
 
-export default function HomePage() {
+export default function MyPostsPage() {
   const navigate = useNavigate();
   const [currentUser, setCurrentUser] = useState(null);
   const [posts, setPosts] = useState([]);
@@ -31,8 +29,6 @@ export default function HomePage() {
     'Content-Type': 'application/x-www-form-urlencoded',
   };
 
-  // --- Data Fetching ---
-
   useEffect(() => {
     if (!authToken) {
       navigate("/");
@@ -40,7 +36,7 @@ export default function HomePage() {
     }
     const fetchCurrentUser = async () => {
       try {
-        const response = await axios.get(`${API_URL}/user`, { headers: { 'Authorization': `Bearer ${authToken}` } });
+        const response = await axios.get(`${API_URL}/user`, { headers: authHeaders });
         setCurrentUser(response.data);
       } catch (error) {
         console.error("Failed to fetch user:", error);
@@ -49,34 +45,27 @@ export default function HomePage() {
     };
     fetchCurrentUser();
   }, [authToken, navigate]);
-  
-  // --- DATA FETCHING LOGIC ---
+
   useEffect(() => {
     const fetchPosts = async () => {
-      if (!authToken) return;
+      if (!authToken || !currentUser) return;
       setLoading(true);
       try {
-        const response = await axios.get(`${API_URL}/post?page=${page}`, { headers: { 'Authorization': `Bearer ${authToken}` } });
-        const newPosts = response.data;
-        
-        // When appending new posts, use the functional update form of setState
-        setPosts(prevPosts => [...prevPosts, ...newPosts]);
-        setHasMore(newPosts.length > 0);
-        
-        // This logic for setting the initial active post is now part of the same effect
-        if (page === 1 && newPosts.length > 0) {
-          setActivePost(newPosts[0]);
+        const response = await axios.get(`${API_URL}/post?page=${page}`, { headers: authHeaders });
+        const userPosts = response.data.filter(post => post.user_id === currentUser.id);
+        setPosts(prevPosts => [...prevPosts, ...userPosts]);
+        setHasMore(userPosts.length > 0);
+        if (page === 1 && userPosts.length > 0) {
+          setActivePost(userPosts[0]);
         }
       } catch (error) {
-        console.error("Failed to fetch posts:", error);
+        console.error("Failed to fetch user posts:", error);
       }
       setLoading(false);
     };
 
     fetchPosts();
-  }, [page, authToken]); 
-
-  // --- Scrolling Observers ---
+  }, [page, authToken, currentUser]);
 
   const lastPostElementRef = useCallback(node => {
     if (loading) return;
@@ -88,7 +77,7 @@ export default function HomePage() {
     });
     if (node) observer.current.observe(node);
   }, [loading, hasMore]);
-  
+
   useEffect(() => {
     postObserver.current = new IntersectionObserver(
         (entries) => {
@@ -109,50 +98,14 @@ export default function HomePage() {
     return () => { postObserver.current?.disconnect(); };
   }, [posts, activePost?.id]);
 
-  // --- Event Handlers ---
-
-  const handlePostCreated = (newPostData) => {
-    const newPostObject = newPostData[0];
-    if (!newPostObject) {
-      console.error("API response for new post is invalid:", newPostData);
-      return;
-    }
-    const postWithUserData = {
-        ...newPostObject,
-        users: currentUser,
-        likes: [{ count: 0 }],
-        replies: [{ count: 0 }]
-    };
-    setPosts(prevPosts => [postWithUserData, ...prevPosts]);
-    feedContainerRef.current?.scrollTo({ top: 0, behavior: 'smooth' });
-  };
-
-  const handleToggleReplyMode = (post) => {
-    if (replyingTo && replyingTo.id === post.id) {
-        setReplyingTo(null);
-    } else {
-        setReplyingTo(post);
-    }
-  };
-  
-  const handleReplyCreated = (updatedPost) => {
-      setPosts(prevPosts => prevPosts.map(p => p.id === updatedPost.id ? updatedPost : p));
-      setActivePost(updatedPost);
-      setReplyingTo(null);
-  };
-
   const handleLogout = () => {
     localStorage.removeItem("authToken");
     navigate("/");
   };
 
-  // --- Render Logic ---
-
-  if (!currentUser) {
-    return <div style={{ textAlign: 'center', marginTop: '40px' }}>Loading Profile...</div>;
-  }
-
-  return (
+  return !currentUser ? (
+    <div style={{ textAlign: 'center', marginTop: '40px' }}>Loading Profile...</div>
+  ) : (
     <div className="home-page-container">
       <LeftSidebar 
         activePost={activePost} 
@@ -165,29 +118,35 @@ export default function HomePage() {
       <main className="main-feed">
         <div className="posts-feed-container" ref={feedContainerRef}>
           {posts.map((post, index) => {
-             const postCardProps = {
-                post: post,
-                format: format,
-                authHeaders: authHeaders,
-                API_URL: API_URL,
-                onToggleReply: handleToggleReplyMode,
-                currentUser: currentUser,
-             };
-             if (posts.length === index + 1) {
-                return <PostCard key={post.id} ref={lastPostElementRef} {...postCardProps} />;
-             }
-             return <PostCard key={post.id} {...postCardProps} />;
+            const postCardProps = {
+              post: post,
+              format: format,
+              authHeaders: authHeaders,
+              API_URL: API_URL,
+              onToggleReply: () => {},
+              currentUser: currentUser,
+            };
+            return posts.length === index + 1
+              ? <PostCard key={post.id} ref={lastPostElementRef} {...postCardProps} />
+              : <PostCard key={post.id} {...postCardProps} />;
           })}
-          {loading && <p style={{textAlign: "center", color: "#333"}}>Loading more posts...</p>}
-          {!hasMore && posts.length > 0 && <p style={{textAlign: "center", color: "#333"}}>No more posts to show.</p>}
+          {loading && <p style={{ textAlign: "center", color: "#333" }}>Loading your posts...</p>}
+          {!hasMore && posts.length > 0 && <p style={{ textAlign: "center", color: "#333" }}>No more of your posts to show.</p>}
+          {!loading && posts.length === 0 && <p style={{ textAlign: "center", color: "#333" }}>You haven’t posted anything yet.</p>}
         </div>
       </main>
 
       <RightSidebar 
         currentUser={currentUser} 
-        onPostCreated={handlePostCreated}
+        onPostCreated={(post) => {
+          setPosts(prev => [post[0], ...prev]);
+        }}
         replyingTo={replyingTo}
-        onReplyCreated={handleReplyCreated}
+        onReplyCreated={(updatedPost) => {
+          setPosts(prev => prev.map(p => p.id === updatedPost.id ? updatedPost : p));
+          setActivePost(updatedPost);
+          setReplyingTo(null);
+        }}
         authHeaders={authHeaders} 
         API_URL={API_URL} 
       />
