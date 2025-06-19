@@ -3,8 +3,9 @@
 /**
  * LikedPosts Component
  * --------------------
- * Displays a feed of posts that the current user has liked.
- * - Fetches liked posts from the backend with infinite scroll.
+ * Displays only the posts that the current user has liked.
+ * - Fetches and displays only the user's liked posts with infinite scroll.
+ * - Uses the same layout and styles as HomePage for consistency.
  * - Shows left and right sidebars for navigation and post creation.
  * - Handles user authentication, logout, and post/reply creation.
  * - Highlights the active post as the user scrolls.
@@ -25,7 +26,7 @@ export default function LikedPosts() {
   // --- State and refs ---
   const navigate = useNavigate();
   const [currentUser, setCurrentUser] = useState(null); // Current user info
-  const [posts, setPosts] = useState([]);               // List of liked posts
+  const [posts, setPosts] = useState([]);               // Only liked posts
   const [page, setPage] = useState(1);                  // Pagination page
   const [loading, setLoading] = useState(false);        // Loading state for posts
   const [hasMore, setHasMore] = useState(true);         // If more posts are available
@@ -43,7 +44,10 @@ export default function LikedPosts() {
     'Content-Type': 'application/x-www-form-urlencoded',
   };
 
-  // --- Fetch current user on mount ---
+  /**
+   * Fetches the current user's data on mount.
+   * Redirects to login if not authenticated.
+   */
   useEffect(() => {
     if (!authToken) {
       navigate("/");
@@ -60,37 +64,36 @@ export default function LikedPosts() {
     };
     fetchCurrentUser();
   }, [authToken, navigate]);
-  
-  // --- Fetch liked posts when page or currentUser changes ---
+
+  /**
+   * Fetches only the posts liked by the current user.
+   * Appends new posts to the existing list.
+   */
   useEffect(() => {
     const fetchLikedPosts = async () => {
       if (!authToken || !currentUser) return;
       setLoading(true);
       try {
+        // Assumes your backend supports /liked-posts?user_id=...
         const response = await axios.get(
           `${API_URL}/liked-posts?user_id=${currentUser.id}&page=${page}`,
           { headers: authHeaders }
         );
         const newPosts = response.data;
-        // Avoid duplicate posts
-        setPosts(prevPosts => {
-          const combined = [...prevPosts, ...newPosts];
-          return combined.filter((post, index, self) =>
-            index === self.findIndex(p => p.id === post.id)
-          );
-        });
+        setPosts(prevPosts => [...prevPosts, ...newPosts]);
         setHasMore(newPosts.length > 0);
         if (page === 1 && newPosts.length > 0) setActivePost(newPosts[0]);
       } catch (error) {
         console.error("Failed to fetch liked posts:", error);
-      } finally {
-        setLoading(false);
       }
+      setLoading(false);
     };
     fetchLikedPosts();
   }, [page, authToken, currentUser]);
 
-  // --- Infinite scroll: load more posts when last post is visible ---
+  /**
+   * Infinite scroll observer: loads more posts when the last post is visible.
+   */
   const lastPostElementRef = useCallback(node => {
     if (loading) return;
     if (observer.current) observer.current.disconnect();
@@ -101,29 +104,33 @@ export default function LikedPosts() {
     });
     if (node) observer.current.observe(node);
   }, [loading, hasMore]);
-  
-  // --- Highlight active post as user scrolls ---
+
+  /**
+   * Snap scroll observer: sets the active post based on scroll position.
+   */
   useEffect(() => {
     postObserver.current = new IntersectionObserver(
-        (entries) => {
-            entries.forEach((entry) => {
-                if (entry.isIntersecting && entry.target.dataset.postId) {
-                    const postId = Number(entry.target.dataset.postId);
-                    const post = posts.find(p => p.id === postId);
-                    if (post && post.id !== activePost?.id) {
-                        setActivePost(post);
-                    }
-                }
-            });
-        },
-        { threshold: 0.7 }
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting && entry.target.dataset.postId) {
+            const postId = Number(entry.target.dataset.postId);
+            const post = posts.find(p => p.id === postId);
+            if (post && post.id !== activePost?.id) {
+              setActivePost(post);
+            }
+          }
+        });
+      },
+      { threshold: 0.7 }
     );
     const postElements = document.querySelectorAll('.post-card-container');
     postElements.forEach(el => postObserver.current.observe(el));
     return () => { postObserver.current?.disconnect(); };
   }, [posts, activePost?.id]);
 
-  // --- Handle new post creation (from right sidebar) ---
+  /**
+   * Handles new post creation by prepending it to the posts list.
+   */
   const handlePostCreated = (newPostData) => {
     const newPostObject = newPostData[0];
     if (!newPostObject) {
@@ -131,38 +138,44 @@ export default function LikedPosts() {
       return;
     }
     const postWithUserData = {
-        ...newPostObject,
-        users: currentUser,
-        likes: [{ count: 0 }],
-        replies: [{ count: 0 }]
+      ...newPostObject,
+      users: currentUser,
+      likes: [{ count: 0 }],
+      replies: [{ count: 0 }]
     };
     setPosts(prevPosts => [postWithUserData, ...prevPosts]);
     feedContainerRef.current?.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
-  // --- Toggle reply mode for a post ---
+  /**
+   * Toggles reply mode for a post.
+   */
   const handleToggleReplyMode = (post) => {
     if (replyingTo && replyingTo.id === post.id) {
-        setReplyingTo(null);
+      setReplyingTo(null);
     } else {
-        setReplyingTo(post);
+      setReplyingTo(post);
     }
   };
-  
-  // --- Handle new reply creation ---
+
+  /**
+   * Handles new reply creation by updating the relevant post.
+   */
   const handleReplyCreated = (updatedPost) => {
-      setPosts(prevPosts => prevPosts.map(p => p.id === updatedPost.id ? updatedPost : p));
-      setActivePost(updatedPost);
-      setReplyingTo(null);
+    setPosts(prevPosts => prevPosts.map(p => p.id === updatedPost.id ? updatedPost : p));
+    setActivePost(updatedPost);
+    setReplyingTo(null);
   };
 
-  // --- Logout handler ---
+  /**
+   * Handles user logout: clears token and redirects to login.
+   */
   const handleLogout = () => {
     localStorage.removeItem("authToken");
     navigate("/");
   };
 
-  // --- Render loading state if user not loaded ---
+  // Show loading state while fetching user
   if (!currentUser) {
     return <div style={{ textAlign: 'center', marginTop: '40px' }}>Loading Profile...</div>;
   }
@@ -171,44 +184,45 @@ export default function LikedPosts() {
   return (
     <div className="home-page-container">
       {/* Left sidebar: user info and navigation */}
-      <LeftSidebar 
-        activePost={activePost} 
-        currentUser={currentUser} 
-        authHeaders={authHeaders} 
+      <LeftSidebar
+        activePost={activePost}
+        currentUser={currentUser}
+        authHeaders={authHeaders}
         API_URL={API_URL}
-        onLogout={handleLogout} 
+        onLogout={handleLogout}
       />
-      
-      {/* Main feed: liked posts */}
+
+      {/* Main feed: liked posts only */}
       <main className="main-feed">
         <div className="posts-feed-container" ref={feedContainerRef}>
           {posts.map((post, index) => {
-             const postCardProps = {
-                post: post,
-                format: format,
-                authHeaders: authHeaders,
-                API_URL: API_URL,
-                onToggleReply: handleToggleReplyMode,
-                currentUser: currentUser,
-             };
-             if (posts.length === index + 1) {
-                return <PostCard key={post.id} ref={lastPostElementRef} {...postCardProps} />;
-             }
-             return <PostCard key={post.id} {...postCardProps} />;
+            const postCardProps = {
+              post: post,
+              format: format,
+              authHeaders: authHeaders,
+              API_URL: API_URL,
+              onToggleReply: handleToggleReplyMode,
+              currentUser: currentUser,
+            };
+            if (posts.length === index + 1) {
+              return <PostCard key={post.id} ref={lastPostElementRef} {...postCardProps} />;
+            }
+            return <PostCard key={post.id} {...postCardProps} />;
           })}
-          {loading && <p style={{textAlign: "center", color: "#333"}}>Loading more posts...</p>}
-          {!hasMore && posts.length > 0 && <p style={{textAlign: "center", color: "#333"}}>No more posts to show.</p>}
+          {loading && <p style={{ textAlign: "center", color: "#333" }}>Loading more posts...</p>}
+          {!hasMore && posts.length > 0 && <p style={{ textAlign: "center", color: "#333" }}>No more posts to show.</p>}
+          {!loading && posts.length === 0 && <p style={{ textAlign: "center", color: "#333" }}>You haven't liked any posts yet.</p>}
         </div>
       </main>
 
       {/* Right sidebar: post creation and reply */}
-      <RightSidebar 
-        currentUser={currentUser} 
+      <RightSidebar
+        currentUser={currentUser}
         onPostCreated={handlePostCreated}
         replyingTo={replyingTo}
         onReplyCreated={handleReplyCreated}
-        authHeaders={authHeaders} 
-        API_URL={API_URL} 
+        authHeaders={authHeaders}
+        API_URL={API_URL}
       />
     </div>
   );

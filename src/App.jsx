@@ -21,7 +21,7 @@ import ProfilePage from "./pages/ProfilePage";
 import LoginPage from "./pages/LoginPage";
 import HomePage from "./pages/HomePage";
 import LikedPosts from "./pages/LikedPosts";
-import MyPosts from "./pages/MyPosts";
+import MyPostsPage from "./pages/MyPostsPage";
 import RegistrationPage from "./pages/RegistrationPage";
 
 export default function App() {

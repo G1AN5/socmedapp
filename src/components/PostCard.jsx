@@ -11,6 +11,14 @@
  * - Optimistically updates like count and state, with error handling.
  * - Shows the number of likes and comments.
  * - Uses a ref for infinite scroll and snap scrolling.
+ * 
+ * Props:
+ * - post: The post object to display.
+ * - format: Date formatting function.
+ * - authHeaders: Authorization headers for API requests.
+ * - API_URL: Base URL for the backend API.
+ * - onToggleReply: Callback to toggle reply mode for this post.
+ * - ref: Forwarded ref for infinite scroll/snap scrolling.
  */
 
 import React, { useState } from 'react';
@@ -24,9 +32,10 @@ const PostCard = React.forwardRef(
     ref
   ) => {
     // State for like count, like status, and like request status
+    // Uses backend-provided like status for initial state
     const [likesCount, setLikesCount] = useState(post.likes[0]?.count || 0);
-    const [isLiked, setIsLiked] = useState(false); // Visual state of the heart
-    const [isLiking, setIsLiking] = useState(false); // Prevents spamming the like button
+    const [isLiked, setIsLiked] = useState(post.isLikedByCurrentUser || false);
+    const [isLiking, setIsLiking] = useState(false);
 
     /**
      * Handles like/unlike action.
