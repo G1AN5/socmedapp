@@ -140,12 +140,9 @@
   max-height: 350px;
   overflow-y: auto;
   padding-right: 8px;
-  /* Custom scrollbar styling */
-  scrollbar-width: thin;
-  scrollbar-color: #e0b96a #fbe9d8;
 }
 
-/* Webkit (Chrome, Edge, Safari) scrollbar styles */
+/* Custom scrollbar for terms and conditions (Webkit browsers) */
 .register-terms-content::-webkit-scrollbar {
   width: 8px;
   background: #fbe9d8;

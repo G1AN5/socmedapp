@@ -4,11 +4,13 @@
  * LoginPage Component
  * -------------------
  * Renders the login form for existing users.
- * Collects user credentials (email and password), validates input,
- * and sends a login request to the backend API.
- * On successful login, redirects to the home page and stores the access token.
- * Errors are displayed above the form.
- * Includes navigation to the registration page and a placeholder for "Forgot password?".
+ * Features:
+ * - Collects user credentials (email and password).
+ * - Validates input and displays errors above the form.
+ * - Sends a login request to the backend API.
+ * - On successful login, stores the access token and redirects to the home page.
+ * - Provides navigation to the registration page.
+ * - Includes a placeholder for "Forgot password?" functionality.
  */
 
 import React, { useState } from "react";

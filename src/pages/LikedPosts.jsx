@@ -1,5 +1,16 @@
 // src/pages/LikedPosts.jsx
 
+/**
+ * LikedPosts Component
+ * --------------------
+ * Displays a feed of posts that the current user has liked.
+ * - Fetches liked posts from the backend with infinite scroll.
+ * - Shows left and right sidebars for navigation and post creation.
+ * - Handles user authentication, logout, and post/reply creation.
+ * - Highlights the active post as the user scrolls.
+ * - Uses IntersectionObserver for infinite scroll and active post highlighting.
+ */
+
 import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
@@ -11,19 +22,20 @@ import LeftSidebar from '../components/LeftSidebar';
 import RightSidebar from '../components/RightSidebar';
 
 export default function LikedPosts() {
+  // --- State and refs ---
   const navigate = useNavigate();
-  const [currentUser, setCurrentUser] = useState(null);
-  const [posts, setPosts] = useState([]);
-  const [page, setPage] = useState(1);
-  const [loading, setLoading] = useState(false);
-  const [hasMore, setHasMore] = useState(true);
-  const [activePost, setActivePost] = useState(null);
-  const [replyingTo, setReplyingTo] = useState(null);
+  const [currentUser, setCurrentUser] = useState(null); // Current user info
+  const [posts, setPosts] = useState([]);               // List of liked posts
+  const [page, setPage] = useState(1);                  // Pagination page
+  const [loading, setLoading] = useState(false);        // Loading state for posts
+  const [hasMore, setHasMore] = useState(true);         // If more posts are available
+  const [activePost, setActivePost] = useState(null);   // Currently active post (for highlighting)
+  const [replyingTo, setReplyingTo] = useState(null);   // Post being replied to
 
   const API_URL = "https://supabase-socmed.vercel.app";
-  const observer = useRef();
-  const postObserver = useRef();
-  const feedContainerRef = useRef(null); 
+  const observer = useRef();            // For infinite scroll
+  const postObserver = useRef();        // For active post highlighting
+  const feedContainerRef = useRef(null);
 
   const authToken = localStorage.getItem("authToken");
   const authHeaders = {
@@ -31,8 +43,7 @@ export default function LikedPosts() {
     'Content-Type': 'application/x-www-form-urlencoded',
   };
 
-  // --- Data Fetching ---
-
+  // --- Fetch current user on mount ---
   useEffect(() => {
     if (!authToken) {
       navigate("/");
@@ -50,39 +61,36 @@ export default function LikedPosts() {
     fetchCurrentUser();
   }, [authToken, navigate]);
   
-  // --- DATA FETCHING LOGIC ---
+  // --- Fetch liked posts when page or currentUser changes ---
   useEffect(() => {
-  const fetchLikedPosts = async () => {
-    if (!authToken || !currentUser) return;
-    setLoading(true);
-    try {
-      const response = await axios.get(
-        `${API_URL}/liked-posts?user_id=${currentUser.id}&page=${page}`,
-        { headers: authHeaders }
-      );
-      const newPosts = response.data;
-
-      setPosts(prevPosts => {
-        const combined = [...prevPosts, ...newPosts];
-        return combined.filter((post, index, self) =>
-          index === self.findIndex(p => p.id === post.id)
+    const fetchLikedPosts = async () => {
+      if (!authToken || !currentUser) return;
+      setLoading(true);
+      try {
+        const response = await axios.get(
+          `${API_URL}/liked-posts?user_id=${currentUser.id}&page=${page}`,
+          { headers: authHeaders }
         );
-      });
-      
-      setHasMore(newPosts.length > 0);
-      if (page === 1 && newPosts.length > 0) setActivePost(newPosts[0]);
-    } catch (error) {
-      console.error("Failed to fetch liked posts:", error);
-    } finally {
-      setLoading(false);
-    }
-  };
+        const newPosts = response.data;
+        // Avoid duplicate posts
+        setPosts(prevPosts => {
+          const combined = [...prevPosts, ...newPosts];
+          return combined.filter((post, index, self) =>
+            index === self.findIndex(p => p.id === post.id)
+          );
+        });
+        setHasMore(newPosts.length > 0);
+        if (page === 1 && newPosts.length > 0) setActivePost(newPosts[0]);
+      } catch (error) {
+        console.error("Failed to fetch liked posts:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchLikedPosts();
+  }, [page, authToken, currentUser]);
 
-  fetchLikedPosts();
-}, [page, authToken, currentUser]);
-
-  // --- Scrolling Observers ---
-
+  // --- Infinite scroll: load more posts when last post is visible ---
   const lastPostElementRef = useCallback(node => {
     if (loading) return;
     if (observer.current) observer.current.disconnect();
@@ -94,6 +102,7 @@ export default function LikedPosts() {
     if (node) observer.current.observe(node);
   }, [loading, hasMore]);
   
+  // --- Highlight active post as user scrolls ---
   useEffect(() => {
     postObserver.current = new IntersectionObserver(
         (entries) => {
@@ -114,8 +123,7 @@ export default function LikedPosts() {
     return () => { postObserver.current?.disconnect(); };
   }, [posts, activePost?.id]);
 
-  // --- Event Handlers ---
-
+  // --- Handle new post creation (from right sidebar) ---
   const handlePostCreated = (newPostData) => {
     const newPostObject = newPostData[0];
     if (!newPostObject) {
@@ -132,6 +140,7 @@ export default function LikedPosts() {
     feedContainerRef.current?.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
+  // --- Toggle reply mode for a post ---
   const handleToggleReplyMode = (post) => {
     if (replyingTo && replyingTo.id === post.id) {
         setReplyingTo(null);
@@ -140,25 +149,28 @@ export default function LikedPosts() {
     }
   };
   
+  // --- Handle new reply creation ---
   const handleReplyCreated = (updatedPost) => {
       setPosts(prevPosts => prevPosts.map(p => p.id === updatedPost.id ? updatedPost : p));
       setActivePost(updatedPost);
       setReplyingTo(null);
   };
 
+  // --- Logout handler ---
   const handleLogout = () => {
     localStorage.removeItem("authToken");
     navigate("/");
   };
 
-  // --- Render Logic ---
-
+  // --- Render loading state if user not loaded ---
   if (!currentUser) {
     return <div style={{ textAlign: 'center', marginTop: '40px' }}>Loading Profile...</div>;
   }
 
+  // --- Main render ---
   return (
     <div className="home-page-container">
+      {/* Left sidebar: user info and navigation */}
       <LeftSidebar 
         activePost={activePost} 
         currentUser={currentUser} 
@@ -167,6 +179,7 @@ export default function LikedPosts() {
         onLogout={handleLogout} 
       />
       
+      {/* Main feed: liked posts */}
       <main className="main-feed">
         <div className="posts-feed-container" ref={feedContainerRef}>
           {posts.map((post, index) => {
@@ -188,6 +201,7 @@ export default function LikedPosts() {
         </div>
       </main>
 
+      {/* Right sidebar: post creation and reply */}
       <RightSidebar 
         currentUser={currentUser} 
         onPostCreated={handlePostCreated}

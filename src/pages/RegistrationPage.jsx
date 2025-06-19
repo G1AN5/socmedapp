@@ -3,11 +3,14 @@
 /**
  * RegistrationPage Component
  * -------------------------
- * This component renders the registration form for new users.
- * It collects user details (first name, last name, email, password, confirm password),
- * validates the input, and sends a registration request to the backend API.
- * On successful registration, the user is redirected to the home page.
- * Errors are displayed above the form.
+ * Renders the registration form for new users.
+ * Features:
+ * - Collects user details (first name, last name, email, password, confirm password).
+ * - Validates input and displays errors above the form.
+ * - Requires acceptance of Terms and Conditions & Privacy Policy before proceeding.
+ * - Sends a registration request to the backend API.
+ * - On successful registration, stores the access token and redirects to the home page.
+ * - Displays the full Terms and Conditions & Privacy Policy in a scrollable sidebar.
  */
 
 import React, { useState } from "react";
@@ -80,8 +83,9 @@ export default function RegistrationPage() {
 
   return (
     <div className="register-container">
+      {/* Left section: Registration form and branding */}
       <div className="register-left">
-        {/* Make the logo container clickable */}
+        {/* Logo and navigation */}
         <div 
           onClick={() => navigate("/")} 
           style={{ cursor: 'pointer', alignSelf: 'flex-start' }}

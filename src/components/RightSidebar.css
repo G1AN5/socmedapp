@@ -1,9 +1,23 @@
 /* src/components/RightSidebar.css */
+
+/**
+ * RightSidebar.css
+ * ----------------
+ * Styles for the RightSidebar component.
+ * Provides layout and styling for:
+ * - Profile button (user info and navigation)
+ * - New post form
+ * - Footer links
+ */
+
+/* Main right sidebar container */
 .right-sidebar {
   display: flex;
   flex-direction: column;
   gap: 20px;
 }
+
+/* Profile button container: user info and navigation */
 .profile-button-container {
   background-color: #8c0e0f;
   color: white;
@@ -17,12 +31,16 @@
   font-size: 1.2rem;
   cursor: pointer;
 }
+
+/* User's profile picture in the sidebar */
 .my-profile-pic {
   width: 40px;
   height: 40px;
   border-radius: 50%;
   border: 2px solid white;
 }
+
+/* New post form container */
 .new-post-form {
   background-color: #f6f6f6;
   border-radius: 15px;
@@ -31,6 +49,8 @@
   flex-direction: column;
   gap: 10px;
 }
+
+/* Header for the new post form */
 .new-post-header {
   background-color: #fff9ef;
   border: 1px solid #333;
@@ -40,6 +60,8 @@
   font-weight: 600;
   color: #333;
 }
+
+/* Textarea for new post input */
 .new-post-form textarea {
   min-height: 150px;
   border: 1px solid #dfc389;
@@ -52,6 +74,8 @@
   font-family: inherit;
   resize: none;
 }
+
+/* Button for submitting a new post */
 .new-post-form button {
   background-color: #dfc389;
   border: none;
@@ -63,14 +87,20 @@
   transition: background-color 0.2s;
   color: #000;
 }
+
+/* Hover effect for new post button */
 .new-post-form button:hover {
   background-color: #cfa13c;
 }
+
+/* Footer links container */
 .footer-links {
   margin-top: auto;
   text-align: center;
   padding-bottom: 10px;
 }
+
+/* Footer link styling */
 .footer-links a {
   margin: 0 10px;
   color: #666;

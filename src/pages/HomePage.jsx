@@ -1,5 +1,15 @@
 // src/pages/HomePage.jsx
 
+/**
+ * HomePage Component
+ * ------------------
+ * Main feed page for authenticated users.
+ * - Fetches and displays posts with infinite scroll.
+ * - Shows left and right sidebars for navigation and post creation.
+ * - Handles user authentication, logout, and post/reply creation.
+ * - Highlights the active post as the user scrolls.
+ */
+
 import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
@@ -11,19 +21,20 @@ import LeftSidebar from '../components/LeftSidebar';
 import RightSidebar from '../components/RightSidebar';
 
 export default function HomePage() {
+  // --- State and refs ---
   const navigate = useNavigate();
-  const [currentUser, setCurrentUser] = useState(null);
-  const [posts, setPosts] = useState([]);
-  const [page, setPage] = useState(1);
-  const [loading, setLoading] = useState(false);
-  const [hasMore, setHasMore] = useState(true);
-  const [activePost, setActivePost] = useState(null);
-  const [replyingTo, setReplyingTo] = useState(null);
+  const [currentUser, setCurrentUser] = useState(null); // Current user info
+  const [posts, setPosts] = useState([]);               // List of posts
+  const [page, setPage] = useState(1);                  // Pagination page
+  const [loading, setLoading] = useState(false);        // Loading state for posts
+  const [hasMore, setHasMore] = useState(true);         // If more posts are available
+  const [activePost, setActivePost] = useState(null);   // Currently active post (for highlighting)
+  const [replyingTo, setReplyingTo] = useState(null);   // Post being replied to
 
   const API_URL = "https://supabase-socmed.vercel.app";
-  const observer = useRef();
-  const postObserver = useRef();
-  const feedContainerRef = useRef(null); 
+  const observer = useRef();            // For infinite scroll
+  const postObserver = useRef();        // For active post highlighting
+  const feedContainerRef = useRef(null);
 
   const authToken = localStorage.getItem("authToken");
   const authHeaders = {
@@ -31,8 +42,7 @@ export default function HomePage() {
     'Content-Type': 'application/x-www-form-urlencoded',
   };
 
-  // --- Data Fetching ---
-
+  // --- Fetch current user on mount ---
   useEffect(() => {
     if (!authToken) {
       navigate("/");
@@ -50,7 +60,7 @@ export default function HomePage() {
     fetchCurrentUser();
   }, [authToken, navigate]);
   
-  // --- DATA FETCHING LOGIC ---
+  // --- Fetch posts when page or authToken changes ---
   useEffect(() => {
     const fetchPosts = async () => {
       if (!authToken) return;
@@ -58,12 +68,8 @@ export default function HomePage() {
       try {
         const response = await axios.get(`${API_URL}/post?page=${page}`, { headers: { 'Authorization': `Bearer ${authToken}` } });
         const newPosts = response.data;
-        
-        // When appending new posts, use the functional update form of setState
         setPosts(prevPosts => [...prevPosts, ...newPosts]);
         setHasMore(newPosts.length > 0);
-        
-        // This logic for setting the initial active post is now part of the same effect
         if (page === 1 && newPosts.length > 0) {
           setActivePost(newPosts[0]);
         }
@@ -72,12 +78,10 @@ export default function HomePage() {
       }
       setLoading(false);
     };
-
     fetchPosts();
   }, [page, authToken]); 
 
-  // --- Scrolling Observers ---
-
+  // --- Infinite scroll: load more posts when last post is visible ---
   const lastPostElementRef = useCallback(node => {
     if (loading) return;
     if (observer.current) observer.current.disconnect();
@@ -89,6 +93,7 @@ export default function HomePage() {
     if (node) observer.current.observe(node);
   }, [loading, hasMore]);
   
+  // --- Highlight active post as user scrolls ---
   useEffect(() => {
     postObserver.current = new IntersectionObserver(
         (entries) => {
@@ -109,8 +114,7 @@ export default function HomePage() {
     return () => { postObserver.current?.disconnect(); };
   }, [posts, activePost?.id]);
 
-  // --- Event Handlers ---
-
+  // --- Handle new post creation ---
   const handlePostCreated = (newPostData) => {
     const newPostObject = newPostData[0];
     if (!newPostObject) {
@@ -127,6 +131,7 @@ export default function HomePage() {
     feedContainerRef.current?.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
+  // --- Toggle reply mode for a post ---
   const handleToggleReplyMode = (post) => {
     if (replyingTo && replyingTo.id === post.id) {
         setReplyingTo(null);
@@ -135,25 +140,28 @@ export default function HomePage() {
     }
   };
   
+  // --- Handle new reply creation ---
   const handleReplyCreated = (updatedPost) => {
       setPosts(prevPosts => prevPosts.map(p => p.id === updatedPost.id ? updatedPost : p));
       setActivePost(updatedPost);
       setReplyingTo(null);
   };
 
+  // --- Logout handler ---
   const handleLogout = () => {
     localStorage.removeItem("authToken");
     navigate("/");
   };
 
-  // --- Render Logic ---
-
+  // --- Render loading state if user not loaded ---
   if (!currentUser) {
     return <div style={{ textAlign: 'center', marginTop: '40px' }}>Loading Profile...</div>;
   }
 
+  // --- Main render ---
   return (
     <div className="home-page-container">
+      {/* Left sidebar: user info and navigation */}
       <LeftSidebar 
         activePost={activePost} 
         currentUser={currentUser} 
@@ -162,6 +170,7 @@ export default function HomePage() {
         onLogout={handleLogout} 
       />
       
+      {/* Main feed: posts */}
       <main className="main-feed">
         <div className="posts-feed-container" ref={feedContainerRef}>
           {posts.map((post, index) => {
@@ -183,6 +192,7 @@ export default function HomePage() {
         </div>
       </main>
 
+      {/* Right sidebar: post creation and reply */}
       <RightSidebar 
         currentUser={currentUser} 
         onPostCreated={handlePostCreated}
