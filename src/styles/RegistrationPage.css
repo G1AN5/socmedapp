@@ -1,20 +1,28 @@
+/* src/styles/RegistrationPage.css */
+
 /**
  * RegistrationPage.css
  * --------------------
  * Styles for the RegistrationPage component.
- * Provides layout, form, and terms styling for the registration page.
  */
 
-/* Main container for registration page layout */
-.register-container {
-  display: flex;
+.registration-page-wrapper {
+  width: 100vw;
   min-height: 100vh;
   background: #fafafa;
-  padding: 20px; 
-  align-items: center; 
+  display: flex;
+  align-items: center;
   justify-content: center;
+  padding: 20px;
+  box-sizing: border-box;
+}
+
+.register-container {
+  display: flex;
   gap: 40px; 
   box-sizing: border-box;
+  width: 100%;
+  max-width: 1200px;
 }
 
 /* Left section: registration form and branding */
@@ -27,7 +35,6 @@
   padding: 20px;
 }
 
-/* Registration page title styling */
 .register-title {
   font-size: 2.5rem; 
   color: #8b1818;
@@ -38,7 +45,6 @@
   position: relative;
 }
 
-/* Underline below the registration title */
 .register-underline {
   width: 90%;
   height: 2px;
@@ -47,7 +53,6 @@
   margin-bottom: 1rem; 
 }
 
-/* "Register Here" subtitle styling */
 .register-here {
   font-size: 1.8rem; 
   font-style: italic;
@@ -57,7 +62,6 @@
   color: #8b1818;
 }
 
-/* Registration form layout */
 .register-form {
   display: flex;
   flex-direction: column;
@@ -67,7 +71,12 @@
   margin: 0 auto;
 }
 
-/* Input fields styling */
+.error-message {
+  color: red;
+  text-align: center;
+  margin-bottom: 10px;
+}
+
 .register-input {
   width: 100%;
   padding: 14px 18px; 
@@ -80,13 +89,11 @@
   box-sizing: border-box;
 }
 
-/* Placeholder color for input fields */
 .register-input::placeholder {
   color: #e0b96a;
   opacity: 1;
 }
 
-/* Registration submit button styling */
 .register-proceed {
   width: 100%;
   padding: 12px 0; 
@@ -101,8 +108,7 @@
   transition: background 0.2s;
 }
 
-/* Registration button hover effect */
-.register-proceed:hover {
+.register-proceed:hover:not(:disabled) {
   background: #cfa13c;
 }
 
@@ -118,13 +124,11 @@
   box-sizing: border-box;
 }
 
-/* Terms and conditions container */
 .register-terms {
   width: 100%;
   max-width: 420px;
 }
 
-/* Terms and conditions title */
 .register-terms h3 {
   text-align: center;
   font-size: 1.5rem;
@@ -133,47 +137,31 @@
   color: #333;
 }
 
-/* Terms and conditions content area */
 .register-terms-content {
   font-size: 1.1rem;
   text-align: left;
-  max-height: 350px;
+  height: 350px;
   overflow-y: auto;
   padding-right: 8px;
 }
 
-/* Custom scrollbar for terms and conditions (Webkit browsers) */
-.register-terms-content::-webkit-scrollbar {
-  width: 8px;
-  background: #fbe9d8;
-}
-
-.register-terms-content::-webkit-scrollbar-thumb {
-  background: #e0b96a;
-  border-radius: 16px; /* Rounded rectangle */
-  min-height: 40px;
-  border: 2px solid #fbe9d8; /* Padding effect for thumb */
-}
-
-.register-terms-content::-webkit-scrollbar-thumb:hover {
-  background: #cfa13c;
-}
-
-.register-terms-content::-webkit-scrollbar-button {
-  display: none;
-  height: 0;
-  width: 0;
-}
-
-/* Paragraphs inside terms and conditions */
 .register-terms-content p {
   margin: 1.5rem 0; 
   line-height: 1.5;
   color: black;
 }
 
-/* Make the terms and conditions label text black */
-#accept-terms + label,
+.terms-container {
+    display: flex;
+    align-items: center;
+    margin: 10px 0;
+}
+
+.terms-container input[type="checkbox"] {
+    margin-right: 8px;
+}
+
 label[for="accept-terms"] {
   color: #111;
+  font-size: 0.98rem;
 }

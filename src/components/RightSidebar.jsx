@@ -21,6 +21,7 @@
  */
 
 import React, { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import axios from 'axios';
 import './RightSidebar.css';
 
@@ -75,10 +76,10 @@ export default function RightSidebar({ currentUser, onPostCreated, replyingTo, o
     return (
         <aside className="right-sidebar">
             {/* Profile button with user's profile picture */}
-            <div className="profile-button-container">
-                 <img src={currentUser.profile_picture} alt="My Profile" className="my-profile-pic" />
-                 <span>Profile</span>
-            </div>
+            <Link to="/profile" className="profile-button-container">
+                <img src={currentUser.profile_picture} alt="My Profile" className="my-profile-pic" />
+                <span>Profile</span>
+            </Link>
             
             {/* New post or reply form */}
             <form className="new-post-form" onSubmit={handleSubmit}>

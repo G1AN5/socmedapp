@@ -89,66 +89,68 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="container">
-      {/* Left section: Branding and tagline */}
-      <div className="left-section">
-        <h1 className="title">
-          QUICKEY
-          <div className="underline"></div>
-        </h1>
-        <p className="subtitle">
-          <span>CONNECT WITH A</span>
-          <br />
-          <span>SINGLE TOUCH</span>
-        </p>
-      </div>
-      {/* Right section: Login form */}
-      <div className="right-section">
-        <form className="auth-card" onSubmit={handleLogin}>
-          {/* Display error message if any */}
-          {error && <p style={{ color: 'yellow' }}>{error}</p>}
-          {/* Email input */}
-          <input
-            className="input"
-            type="email"
-            placeholder="Email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-          />
-          {/* Password input */}
-          <input
-            className="input"
-            type="password"
-            placeholder="Password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-          />
-          {/* Forgot password link */}
-          <div className="forgot-row">
-            <a
-              className="forgot"
-              href="#"
-              tabIndex={0}
-              onClick={handleForgotPassword}
-            >
-              Forgot password?
-            </a>
-          </div>
-          {/* Login button */}
-          <button className="login-btn" type="submit">Log In</button>
-          <hr className="divider" />
-          {/* Register link */}
-          <div className="register-row">
-            <span
-              className="register"
-              tabIndex={0}
-              onClick={handleRegister}
-              style={{ cursor: "pointer" }}
-            >
-              Register now!
-            </span>
-          </div>
-        </form>
+    <div className="login-page-wrapper">
+      <div className="container">
+        {/* Left section: Branding and tagline */}
+        <div className="left-section">
+          <h1 className="title">
+            QUICKEY
+            <div className="underline"></div>
+          </h1>
+          <p className="subtitle">
+            <span>CONNECT WITH A</span>
+            <br />
+            <span>SINGLE TOUCH</span>
+          </p>
+        </div>
+        {/* Right section: Login form */}
+        <div className="right-section">
+          <form className="auth-card" onSubmit={handleLogin}>
+            {/* Display error message if any */}
+            {error && <p className="error-message">{error}</p>}
+            {/* Email input */}
+            <input
+              className="input"
+              type="email"
+              placeholder="Email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+            />
+            {/* Password input */}
+            <input
+              className="input"
+              type="password"
+              placeholder="Password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+            />
+            {/* Forgot password link */}
+            <div className="forgot-row">
+              <a
+                className="forgot"
+                href="#"
+                tabIndex={0}
+                onClick={handleForgotPassword}
+              >
+                Forgot password?
+              </a>
+            </div>
+            {/* Login button */}
+            <button className="login-btn" type="submit">Log In</button>
+            <hr className="divider" />
+            {/* Register link */}
+            <div className="register-row">
+              <span
+                className="register"
+                tabIndex={0}
+                onClick={handleRegister}
+                style={{ cursor: "pointer" }}
+              >
+                Register now!
+              </span>
+            </div>
+          </form>
+        </div>
       </div>
     </div>
   );

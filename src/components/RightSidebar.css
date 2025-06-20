@@ -28,8 +28,15 @@
   align-items: center;
   justify-content: center;
   gap: 10px;
-  font-size: 1.2rem;
+  text-decoration: none;  
   cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+/* Profile button hover effect */
+.profile-button-container:hover {
+  background-color: #700b0c;
+  border-color: #700b0c;
 }
 
 /* User's profile picture in the sidebar */

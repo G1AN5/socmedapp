@@ -5,14 +5,24 @@
  * Provides responsive layout, branding, and form styling for the login page.
  */
 
+/* FIX: Wrapper for the entire login page to control background and centering */
+.login-page-wrapper {
+  background-color: #f0f2f5; /* Light gray background like the desired screenshot */
+  width: 100vw;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  box-sizing: border-box;
+}
+
 /* Container for the login page layout */
 .container {
-  min-height: 100vh;
   display: flex;
   align-items: center;
   justify-content: center; 
   box-sizing: border-box;
-  padding: 40px;
   width: 100%;
   max-width: 1400px;
   margin: 0 auto; 
@@ -72,10 +82,10 @@
 /* Authentication card styling */
 .auth-card {
   background: #8b1818;
-  border-radius: 60px;
-  box-shadow: 12px 12px 32px #e0b96a55, 0 0 32px #0002;
+  border-radius: 24px; /* Slightly reduced for a more modern look */
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
   padding: 48px 36px 36px 36px;
-  min-width: 350px;
+  min-width: 380px; /* Increased min-width for better spacing */
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -84,22 +94,38 @@
   height: auto;
 }
 
+/* Error message styling */
+.error-message {
+  color: #ffcc00; /* Bright yellow for visibility */
+  font-weight: 500;
+  text-align: center;
+  margin-bottom: 10px;
+}
+
+
 /* Input fields styling */
 .input {
   width: 100%;
   padding: 14px 18px;
-  border: none;
-  border-radius: 18px;
-  background: #fbe9d8;
+  border: 1px solid transparent;
+  border-radius: 12px; /* Adjusted for consistency */
+  background: #f0e6e6; /* Lighter background for better contrast */
   font-size: 1rem;
-  color: #8b1818;
+  color: #333;
   outline: none;
   box-sizing: border-box;
+  transition: border-color 0.2s, box-shadow 0.2s;
 }
+
+.input:focus {
+  border-color: #e0b96a;
+  box-shadow: 0 0 0 3px rgba(224, 185, 106, 0.3);
+}
+
 
 /* Placeholder color for input fields */
 .input::placeholder {
-  color: #e0b96a;
+  color: #999;
   opacity: 1;
 }
 
@@ -113,9 +139,12 @@
 /* Forgot password link styling */
 .forgot {
   color: #e0b96a;
-  font-size: 0.95rem;
-  font-style: italic;
+  font-size: 0.9rem;
   cursor: pointer;
+  text-decoration: none;
+}
+
+.forgot:hover {
   text-decoration: underline;
 }
 
@@ -124,13 +153,14 @@
   width: 100%;
   padding: 12px 0;
   background: #e0b96a;
-  color: #fff;
-  font-size: 1.3rem;
+  color: #8b1818;
+  font-size: 1.2rem;
   font-weight: 600;
   border: none;
-  border-radius: 18px;
+  border-radius: 12px;
   cursor: pointer;
-  transition: background 0.2s;
+  transition: background-color 0.2s;
+  margin-top: 10px;
 }
 
 /* Login button hover effect */
@@ -142,8 +172,8 @@
 .divider {
   width: 100%;
   border: none;
-  border-top: 1.5px solid #e0b96a;
-  margin: 0;
+  border-top: 1px solid #e0b96a;
+  margin: 10px 0;
 }
 
 /* Register row styling */
@@ -156,10 +186,10 @@
 /* Register link styling */
 .register {
   color: #fff;
-  font-size: 1.2rem;
-  font-style: italic;
-  font-weight: 700;
-  text-shadow: 1px 1px 0 #0002;
+  font-size: 1rem;
+  font-weight: 500;
   cursor: pointer;
+  background-color: transparent;
+  border: none;
   text-decoration: underline;
 }
