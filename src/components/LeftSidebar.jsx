@@ -62,7 +62,8 @@ export default function LeftSidebar({ activePost, currentUser, authHeaders, API_
     return (
         <aside className="left-sidebar">
             {/* Logo and branding */}
-            <div className="logo-container">
+            <div className="logo-container logo-row">
+              <img src="/quickeylogo.png" alt="Quickey Logo" className="quickey-logo-img" />
               <h1 className="sidebar-logo-title">
                 QUICKEY
                 <div className="sidebar-logo-underline"></div>

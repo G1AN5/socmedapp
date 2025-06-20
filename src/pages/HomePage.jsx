@@ -169,7 +169,6 @@ export default function HomePage() {
         API_URL={API_URL}
         onLogout={handleLogout} 
       />
-      
       {/* Main feed: posts */}
       <main className="main-feed">
         <div className="posts-feed-container" ref={feedContainerRef}>

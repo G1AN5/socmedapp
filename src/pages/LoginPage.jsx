@@ -93,10 +93,13 @@ export default function LoginPage() {
       <div className="container">
         {/* Left section: Branding and tagline */}
         <div className="left-section">
-          <h1 className="title">
-            QUICKEY
-            <div className="underline"></div>
-          </h1>
+          <div className="logo-row">
+            <img src="/quickeylogo.png" alt="Quickey Logo" className="quickey-logo-img" />
+            <h1 className="title">
+              QUICKEY
+              <div className="underline"></div>
+            </h1>
+          </div>
           <p className="subtitle">
             <span>CONNECT WITH A</span>
             <br />

@@ -43,6 +43,21 @@
   margin-top: 4px;
 }
 
+/* Styles for logo alignment and sizing */
+.logo-row {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+.quickey-logo-img {
+  height: 48px;
+  width: 48px;
+  object-fit: contain;
+  border-radius: 10px;
+  background: #fff;
+  box-shadow: 0 2px 8px rgba(140,14,15,0.10);
+}
+
 /* Main navigation links */
 .main-nav {
   display: flex;

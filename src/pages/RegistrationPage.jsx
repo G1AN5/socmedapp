@@ -65,10 +65,13 @@ export default function RegistrationPage() {
             onClick={() => navigate("/")} 
             style={{ cursor: 'pointer', alignSelf: 'flex-start' }}
           >
-            <h1 className="register-title">
-              QUICKEY
-              <div className="register-underline"></div>
-            </h1>
+            <div className="logo-row">
+              <img src="/quickeylogo.png" alt="Quickey Logo" className="quickey-logo-img" />
+              <h1 className="register-title">
+                QUICKEY
+                <div className="register-underline"></div>
+              </h1>
+            </div>
           </div>
           <h2 className="register-here">Register Here</h2>
           <form className="register-form" onSubmit={handleSubmit}>

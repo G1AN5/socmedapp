@@ -193,3 +193,21 @@
   border: none;
   text-decoration: underline;
 }
+
+/* Logo row styling for consistent alignment and spacing */
+.logo-row {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  margin-bottom: 8px;
+}
+
+/* Quickey logo image styling */
+.quickey-logo-img {
+  height: 64px;
+  width: 64px;
+  object-fit: contain;
+  border-radius: 12px;
+  background: #fff;
+  box-shadow: 0 2px 8px rgba(140,14,15,0.10);
+}

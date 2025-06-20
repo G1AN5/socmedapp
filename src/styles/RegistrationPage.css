@@ -165,3 +165,19 @@ label[for="accept-terms"] {
   color: #111;
   font-size: 0.98rem;
 }
+
+.logo-row {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  margin-bottom: 8px;
+}
+
+.quickey-logo-img {
+  height: 64px;
+  width: 64px;
+  object-fit: contain;
+  border-radius: 12px;
+  background: #fff;
+  box-shadow: 0 2px 8px rgba(140,14,15,0.10);
+}
