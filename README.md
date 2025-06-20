@@ -2,6 +2,8 @@
 
 API used: https://supabase-socmed.vercel.app/
 
+Vercel Deployment: https://quickey-beta.vercel.app/
+
 Group Members Contributed:
 
 Chan, Mark Miguel
@@ -15,3 +17,8 @@ Luna, Kobe Chryslerr
 Reyes, Jeroen Chris
 
 Saluta, Gian Daniel
+
+
+# Disclaimer
+
+Google Gemini and Github Copilot was utilized as a learning aid for understanding various React and CSS syntax, exploring styling options, and for troubleshooting various coding issues encountered during the development process. Its use was for educational and problem-solving purposes.
