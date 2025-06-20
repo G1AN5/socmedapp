@@ -2,7 +2,7 @@
 
 API used: https://supabase-socmed.vercel.app/
 
-Vercel Deployment: https://quickey-beta.vercel.app/
+Vercel Deployment: https://quickeyapp.vercel.app/
 
 Group Members Contributed:
 
