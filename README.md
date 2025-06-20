@@ -2,6 +2,8 @@
 
 API used: https://supabase-socmed.vercel.app/
 
+Vercel Deployment: https://quickey-beta.vercel.app/
+
 Group Members Contributed:
 
 Chan, Mark Miguel
