@@ -6,8 +6,6 @@ Vercel Deployment: https://quickeyapp.vercel.app/
 
 Group Members Contributed:
 
-Chan, Mark Miguel
-
 Domingo, Jared
 
 Gorospe, King Rufer
